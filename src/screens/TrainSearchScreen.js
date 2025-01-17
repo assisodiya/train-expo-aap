@@ -49,7 +49,7 @@ const TrainSearchScreen = ({ navigation }) => {
       daysAgo: '1 day ago',
       lastUpdate: 'Last updated 1 hour ago',
       classes: [
-        { name: 'SL', fare: '365', status: 'Not Available' },
+        { name: '2A', fare: '365', status: 'Not Available' },
         { name: 'SL', fare: '365', status: 'Not Available', tatkal: true },
         { name: '3A', status: 'WL 20', chance: '60% Chance' }
       ],
@@ -69,7 +69,7 @@ const TrainSearchScreen = ({ navigation }) => {
       lastUpdate: 'Last updated 1 hour ago',
       classes: [
         { name: 'SL', fare: '365', status: 'Not Available', tatkal: true },
-        { name: '3A', fare: '990', status: 'WL 42', chance: '61% Chance' },
+        { name: 'EC', fare: '990', status: 'WL 42', chance: '61% Chance' },
         { name: '3A', status: 'Not Available', tatkal: true }
       ]
     },
@@ -88,7 +88,7 @@ const TrainSearchScreen = ({ navigation }) => {
       lastUpdate: 'Last updated 1 hour ago',
       classes: [
         { name: 'SL', fare: '365', status: 'Not Available', tatkal: true },
-        { name: '3A', fare: '990', status: 'WL 42', chance: '61% Chance' },
+        { name: 'EC', fare: '990', status: 'WL 42', chance: '61% Chance' },
         { name: '3A', status: 'Not Available', tatkal: true }
       ]
     },
@@ -107,7 +107,7 @@ const TrainSearchScreen = ({ navigation }) => {
       lastUpdate: 'Last updated 1 hour ago',
       classes: [
         { name: 'SL', fare: '365', status: 'Not Available', tatkal: true },
-        { name: '3A', fare: '990', status: 'WL 42', chance: '61% Chance' },
+        { name: 'EC', fare: '990', status: 'WL 42', chance: '61% Chance' },
         { name: '3A', status: 'Not Available', tatkal: true }
       ]
     }
@@ -179,22 +179,24 @@ const TrainSearchScreen = ({ navigation }) => {
 
       <View style={styles.classesContainer}>
         {item.classes.map((classItem, index) => (
-          <TouchableOpacity key={index} onPress={() => setActiveClass({class: classItem.name, train: item.number })} >
-            <Button style={styles.classItem}>
-              <Text style={styles.className}>{classItem.name}</Text>
+          <TouchableOpacity key={index} onPress={() => setActiveClass({ class: classItem.name, train: item.number })} >
+            <Button style={[styles.classItem, (activeClass.class === classItem.name & activeClass.train === item.number) && styles.activeClass]}>
+              <Text style={[styles.className, (activeClass.class === classItem.name && activeClass.train === item.number) && styles.activeClassName]}>{classItem.name}</Text>
             </Button>
           </TouchableOpacity>
         ))}
       </View>
-      {activeClass.train === item.number && 
+      {activeClass.train === item.number &&
         //show quota list here
-        quotaList.map((quota, index) => (
-          <TouchableOpacity key={index} onPress={() => setActiveClass({ ...activeClass, quota })} >
-            <Button style={styles.classItem}>
-              <Text style={styles.className}>{quota}</Text>
-            </Button>
-          </TouchableOpacity>
-        ))
+        <View style={styles.QuotaContainer}>
+          {quotaList.map((quota, index) => (
+            <TouchableOpacity key={index} onPress={() => setActiveClass({ ...activeClass, quota })} >
+              <Button style={styles.classItem}>
+                <Text style={styles.className}>{quota}</Text>
+              </Button>
+            </TouchableOpacity>
+          ))}
+        </View>
       }
 
     </Card>
@@ -208,12 +210,13 @@ const TrainSearchScreen = ({ navigation }) => {
             <IconButton
               icon="arrow-left"
               size={24}
+              color="white"
               onPress={() => navigation.goBack()}
             />
             <View style={styles.routeContainer}>
               <View style={styles.routeRow}>
                 <Text style={styles.stationCode}>GGN</Text>
-                <Text style={styles.routeArrow}><Ionicons name="arrow-forward" size={16} color="black" /></Text>
+                <Text style={styles.routeArrow}><Ionicons name="arrow-forward" size={16} color="lightgray" /></Text>
                 <Text style={styles.stationCode}>JU</Text>
               </View>
               <View style={styles.routeDetailsRow}>
@@ -224,7 +227,7 @@ const TrainSearchScreen = ({ navigation }) => {
           <IconButton
             icon="pencil-outline"
             size={20}
-            color="#4CAF50"
+            color="#fff"
             onPress={() => { }}
           />
         </View>
@@ -273,11 +276,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#f5f5f5',
-    paddingVertical: 8,
+    backgroundColor: `rgba(${lightColors.backgroundRGB}, 0.8)`,
+    paddingVertical: 4,
     paddingRight: 8,
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
   },
   headerLeft: {
     flexDirection: 'row',
@@ -295,11 +299,11 @@ const styles = StyleSheet.create({
   stationCode: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#333',
+    color: lightColors.light,
   },
   routeArrow: {
     fontSize: 16,
-    color: '#666',
+    color: lightColors.light,
     marginHorizontal: 8,
   },
   routeDetailsRow: {
@@ -307,7 +311,7 @@ const styles = StyleSheet.create({
   },
   routeDetails: {
     fontSize: 13,
-    color: '#666',
+    color: lightColors.light,
   },
   dateListContainer: {
     backgroundColor: '#fff',
@@ -449,7 +453,7 @@ const styles = StyleSheet.create({
   },
 
   classItem: {
-    backgroundColor: `rgba(${lightColors.backgroundRGBSuccess}, 0.1)`, // Light background for each class button   
+    backgroundColor: `rgba(${lightColors.backgroundRGBSuccess}, 0.1)`,
     marginRight: 8,
     borderRadius: 4,
     paddingVertical: 2,
@@ -457,7 +461,12 @@ const styles = StyleSheet.create({
     elevation: 2,
     boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
   },
-
+  activeClass : {
+    backgroundColor: `rgba(${lightColors.backgroundRGBSuccess}, 0.9)`,
+  },
+  activeClassName : {
+    color: lightColors.light,
+  },
   className: {
     marginHorizontal: 4,
     marginVertical: 4,
@@ -468,6 +477,15 @@ const styles = StyleSheet.create({
   classHeader: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  QuotaContainer : {
+    overflow : 'scroll',
+    flexDirection: 'row', // This makes the buttons align horizontally
+    flexWrap: 'nowrap',
+    justifyContent: 'flex-start',
+    width: '100%',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
   },
   fare: {
     fontSize: 14,
