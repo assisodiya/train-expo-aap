@@ -5,7 +5,18 @@ import { Ionicons } from '@expo/vector-icons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { lightColors, darkColors } from '../themes/colors';
 const TrainSearchScreen = ({ navigation }) => {
-  const [selectedDate, setSelectedDate] = useState('11 Nov, Mon');
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toLocaleDateString('en-US', {
+      day: '2-digit',
+      month: 'short',
+      weekday: 'short',
+    })
+  );
+  const [quotaList, setQuotaList] = useState(['GN', 'TQ', 'LD', 'SC', 'PT']);
+  const [activeClass, setActiveClass] = useState({
+    class: '',
+    train: '',
+  });
   const generateDates = (days) => {
     const options = { day: '2-digit', month: 'short', weekday: 'short' };
     const formatter = new Intl.DateTimeFormat('en-US', options);
@@ -41,7 +52,7 @@ const TrainSearchScreen = ({ navigation }) => {
         { name: 'SL', fare: '365', status: 'Not Available' },
         { name: 'SL', fare: '365', status: 'Not Available', tatkal: true },
         { name: '3A', status: 'WL 20', chance: '60% Chance' }
-      ]
+      ],
     },
     {
       id: '2',
@@ -161,20 +172,31 @@ const TrainSearchScreen = ({ navigation }) => {
           </View>
           <View style={[styles.timeStation, { alignItems: 'flex-end' }]}>
             <Text style={styles.time}>{item.arrivalTime}</Text>
-            <Text style={[styles.station, { color: lightColors.error}]}>{item.toStation}</Text>
+            <Text style={[styles.station, { color: lightColors.error }]}>{item.toStation}</Text>
           </View>
         </View>
       </View>
 
       <View style={styles.classesContainer}>
         {item.classes.map((classItem, index) => (
-          <TouchableOpacity key={index} >
+          <TouchableOpacity key={index} onPress={() => setActiveClass({class: classItem.name, train: item.number })} >
             <Button style={styles.classItem}>
               <Text style={styles.className}>{classItem.name}</Text>
             </Button>
           </TouchableOpacity>
         ))}
       </View>
+      {activeClass.train === item.number && 
+        //show quota list here
+        quotaList.map((quota, index) => (
+          <TouchableOpacity key={index} onPress={() => setActiveClass({ ...activeClass, quota })} >
+            <Button style={styles.classItem}>
+              <Text style={styles.className}>{quota}</Text>
+            </Button>
+          </TouchableOpacity>
+        ))
+      }
+
     </Card>
   );
 
@@ -191,7 +213,7 @@ const TrainSearchScreen = ({ navigation }) => {
             <View style={styles.routeContainer}>
               <View style={styles.routeRow}>
                 <Text style={styles.stationCode}>GGN</Text>
-                <Text style={styles.routeArrow}>→</Text>
+                <Text style={styles.routeArrow}><Ionicons name="arrow-forward" size={16} color="black" /></Text>
                 <Text style={styles.stationCode}>JU</Text>
               </View>
               <View style={styles.routeDetailsRow}>
@@ -391,7 +413,7 @@ const styles = StyleSheet.create({
   station: {
     fontSize: 13,
     color: '#666',
-    fontWeight: 'bold',  
+    fontWeight: 'bold',
   },
   durationContainer: {
     flex: 1,
@@ -433,7 +455,7 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     paddingHorizontal: 2,
     elevation: 2,
-    boxShadow : '0 2px 4px rgba(0, 0, 0, 0.1)',
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
   },
 
   className: {

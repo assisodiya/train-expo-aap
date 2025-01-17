@@ -4,7 +4,7 @@ export const lightColors = {
     primary: '#303ac3',
     success: '#4CAF50',
     warning: '#FFC107',
-    error: '#F44336',
+    error: '#fb573b',
     info: '#2196F3',
     background: '#303ac3',
     light : '#ffffff',
