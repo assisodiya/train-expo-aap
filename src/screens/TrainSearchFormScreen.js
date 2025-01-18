@@ -3,8 +3,10 @@ import { View, StyleSheet, ScrollView, TouchableOpacity, Platform, SafeAreaView,
 import { Text, Surface, IconButton, Button, Portal, Modal, Provider } from 'react-native-paper';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import moment from 'moment';
+import { useTheme } from 'react-native-paper';
 import { lightColors } from '../themes/colors';
 const TrainSearchFormScreen = ({ navigation }) => {
+  const theme = useTheme();
   const [fromStation, setFromStation] = useState({ code: 'NZM', name: 'H Nizamuddin', city: 'New Delhi, Delhi' });
   const [toStation, setToStation] = useState({ code: 'PNVL', name: 'Panvel', city: 'Mumbai, Maharashtra' });
   const [selectedDate, setSelectedDate] = useState(moment().format('YYYY-MM-DD'));
@@ -51,7 +53,7 @@ const TrainSearchFormScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.mainContainer}>
+      <View style={[styles.mainContainer, { backgroundColor: theme.colors.background }]}>
         <ScrollView style={styles.container}>
           <View style={styles.header}>
             <Text style={styles.logoText}>
@@ -263,7 +265,6 @@ const styles = StyleSheet.create({
   },
   mainContainer: {
     flex: 1,
-    backgroundColor: '#fff',
   },
   container: {
     flex: 1,

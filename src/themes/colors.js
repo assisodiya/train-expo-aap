@@ -15,7 +15,6 @@ export const lightColors = {
     backgroundRGBInfo: '33, 150, 243',
     surface: '#f5f5f5',
     text: '#000000',
-    error: '#b00020',
     disabled: '#f1f1f1',
     placeholder: '#a0a0a0',
     backdrop: '#eeeeee',
@@ -23,7 +22,7 @@ export const lightColors = {
   
   export const darkColors = {
     primary: '#303ac3',
-    background: '#121212',
+    background: 'black',
     surface: '#1e1e1e',
     text: '#ffffff',
     error: '#cf6679',

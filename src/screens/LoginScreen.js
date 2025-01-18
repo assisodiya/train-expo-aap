@@ -1,28 +1,28 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { TextInput, Button, Text, useTheme } from 'react-native-paper';
-import { SvgXml } from 'react-native-svg';
+import { TextInput, Button, Text, IconButton, useTheme } from 'react-native-paper';
+import { lightColors, darkColors } from '../themes/colors';
+
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const theme = useTheme();
-  const emailIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 13.5l8-5v9l-8-5-8 5v-9l8 5zm0-9.5l-8 5v9l8-5 8 5v-9l-8-5z"/></svg>`;
-  const lockIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 3c-1.11 0-2 .89-2 2v6h4v-6c0-1.11-.89-2-2-2zm6 8h-4v-6c0-2.21-1.79-4-4-4s-4 1.79-4 4v6h-4c-1.1 0-2 .9-2 2v7c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-7c0-1.1-.9-2-2-2z"/></svg>`;
+  const theme = useTheme(); // Using the theme from react-native-paper
+
   const handleLogin = () => {
     // TODO: Implement login logic
     navigation.navigate('TrainSearchForm');
   };
 
+  // Determine background and text color based on the theme
+  const backgroundColor = theme.dark ? darkColors.background : lightColors.background;
+  const textColor = theme.dark ? darkColors.text : lightColors.text;
+  const primaryColor = theme.dark ? darkColors.light : lightColors.dark;
+  console.log('modecheck', theme.dark);
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <Image
-        source={''}
-        style={styles.logo}
-      />
-      <Text style={[styles.title, { color: theme.colors.primary }]}>
-        Welcome Back!
-      </Text>
-      <Text style={styles.subtitle}>
+    <View style={[styles.container, { backgroundColor }]}>
+      <Image source={''} style={styles.logo} />
+      <Text style={[styles.title, { color: primaryColor }]}>Welcome Back!</Text>
+      <Text style={[styles.subtitle, { color: textColor }]}>
         Login to continue booking your train tickets.
       </Text>
       <TextInput
@@ -30,8 +30,8 @@ const LoginScreen = ({ navigation }) => {
         value={email}
         onChangeText={setEmail}
         mode="outlined"
-        style={styles.input}
-        left={<SvgXml xml={emailIcon} width={24} height={24} />}
+        icon="email"
+        style={[styles.input, { borderColor: primaryColor }]} // Apply border color dynamically
       />
       <TextInput
         label="Password"
@@ -39,26 +39,21 @@ const LoginScreen = ({ navigation }) => {
         onChangeText={setPassword}
         secureTextEntry
         mode="outlined"
-        style={styles.input}
-        left={<SvgXml xml={lockIcon} width={24} height={24} />}
+        style={[styles.input, { borderColor: primaryColor }]} // Apply border color dynamically
       />
       <Button
         mode="contained"
         onPress={handleLogin}
-        style={styles.button}
+        style={[styles.button, { backgroundColor: primaryColor }]} // Apply button color dynamically
         contentStyle={styles.buttonContent}
       >
-        Login
+        Login <IconButton icon="login" color="white" />
       </Button>
       <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-        <Text style={[styles.link, { color: theme.colors.primary }]}>
-          Don't have an account? Sign Up
-        </Text>
+        <Text style={[styles.link, { color: primaryColor }]}>Don't have an account? Sign Up</Text>
       </TouchableOpacity>
       <TouchableOpacity>
-        <Text style={[styles.forgotPassword, { color: theme.colors.accent }]}>
-          Forgot Password?
-        </Text>
+        <Text style={[styles.forgotPassword, { color: primaryColor }]}>Forgot Password?</Text>
       </TouchableOpacity>
     </View>
   );
@@ -83,15 +78,17 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 16,
-    color: '#6c757d',
     textAlign: 'center',
     marginBottom: 30,
   },
   input: {
     width: '100%',
     marginBottom: 15,
+    borderRadius: 20,
   },
   button: {
+    fontSize: 20,
+    fontWeight: 'bold',
     width: '100%',
     borderRadius: 5,
   },
