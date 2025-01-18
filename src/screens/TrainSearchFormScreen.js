@@ -24,7 +24,7 @@ const TrainSearchFormScreen = ({ navigation }) => {
     { id: 'trains', icon: 'train', label: 'Trains', },
     { id: 'flights', icon: 'airplane', label: 'Flights', },
     { id: 'bus', icon: 'bus', label: 'Bus', },
-    { id: 'hotels', icon: 'hotel', label: 'Hotels', discount: 'Upto 50% Off' },
+    { id: 'hotels', icon: 'home', label: 'Hotels', discount: 'Upto 50% Off' },
   ];
 
   const otherServices = [

@@ -1,57 +1,46 @@
-import React, { createContext, useState, useEffect, useMemo } from 'react';
+import React, { createContext, useState, useEffect, useMemo, useLayoutEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Appearance } from 'react-native';
+import { useColorScheme } from 'react-native';
 
 export const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  // Initialize the system theme based on the device's appearance setting
-  const systemTheme = Appearance.getColorScheme();
-  console.log('Initial systemTheme:', systemTheme);
+  // Use useColorScheme() to detect system theme
+  const systemTheme = useColorScheme(); // Automatically detects the system theme (light/dark)
+  console.log('Initial systemTheme detected by useColorScheme:', systemTheme);
 
-  // Initialize theme state with systemTheme, or fall back to light mode
-  const [theme, setTheme] = useState(systemTheme || 'light');
+  const [theme, setTheme] = useState(systemTheme || 'light'); // Default to 'light' if null or undefined
 
   useEffect(() => {
-    // Load the stored theme preference from AsyncStorage when the app starts
     const loadTheme = async () => {
       try {
         const storedTheme = await AsyncStorage.getItem('theme');
         if (storedTheme) {
-          setTheme(storedTheme); // Use stored theme if available
+          console.log('Stored theme found:', storedTheme);
+          setTheme(storedTheme); // Use stored theme
         } else {
-          setTheme(systemTheme || 'light'); // Default to system theme if no stored theme
+          console.log('No stored theme, using system theme:', systemTheme);
+          setTheme(systemTheme || 'light'); // Default to system theme
         }
       } catch (error) {
         console.error('Failed to load theme from AsyncStorage:', error);
-        setTheme(systemTheme || 'light'); // Fallback to system theme
       }
     };
 
-    loadTheme(); // Call the load theme function
-
-    // Listen for changes in the system theme (light/dark mode)
-    const themeChangeListener = Appearance.addChangeListener(({ colorScheme }) => {
-      console.log('System theme changed:', colorScheme);
-      setTheme(colorScheme); // Update theme when system theme changes
-    });
-
-    // Cleanup listener when the component unmounts
-    return () => themeChangeListener.remove();
-  }, [systemTheme]);
+    loadTheme();
+  }, [systemTheme]); // Re-run if system theme changes
 
   const toggleTheme = async () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
     try {
-      // Toggle between light and dark modes
-      const newTheme = theme === 'light' ? 'dark' : 'light';
-      setTheme(newTheme);
-      await AsyncStorage.setItem('theme', newTheme); // Save the selected theme to AsyncStorage
+      console.log('Saving new theme to AsyncStorage:', newTheme);
+      await AsyncStorage.setItem('theme', newTheme); // Save new theme to AsyncStorage
     } catch (error) {
       console.error('Failed to save theme to AsyncStorage:', error);
     }
   };
 
-  // Memoize the context value to optimize re-renders
   const contextValue = useMemo(() => ({ theme, toggleTheme }), [theme]);
 
   return (

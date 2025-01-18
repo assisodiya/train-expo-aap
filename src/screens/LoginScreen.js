@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Image, TouchableOpacity, Switch } from 'react-native';
 import { TextInput, Button, Text, IconButton, useTheme } from 'react-native-paper';
-import { lightColors, darkColors } from '../themes/colors';
+import { lightColors, darkColors } from '../themes/colors'; // Assuming these color variables are defined
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const theme = useTheme(); // Using the theme from react-native-paper
 
   const handleLogin = () => {
@@ -13,11 +14,16 @@ const LoginScreen = ({ navigation }) => {
     navigation.navigate('TrainSearchForm');
   };
 
+  // Handle theme toggle
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
   // Determine background and text color based on the theme
-  const backgroundColor = theme.dark ? darkColors.background : lightColors.background;
-  const textColor = theme.dark ? darkColors.text : lightColors.text;
-  const primaryColor = theme.dark ? darkColors.light : lightColors.dark;
-  console.log('modecheck', theme.dark);
+  const backgroundColor = isDarkMode ? darkColors.background : lightColors.background;
+  const textColor = isDarkMode ? darkColors.text : lightColors.text;
+  const primaryColor = isDarkMode ? darkColors.primary : lightColors.primary;
+
   return (
     <View style={[styles.container, { backgroundColor }]}>
       <Image source={''} style={styles.logo} />
@@ -25,6 +31,7 @@ const LoginScreen = ({ navigation }) => {
       <Text style={[styles.subtitle, { color: textColor }]}>
         Login to continue booking your train tickets.
       </Text>
+
       <TextInput
         label="Email"
         value={email}
@@ -32,6 +39,7 @@ const LoginScreen = ({ navigation }) => {
         mode="outlined"
         icon="email"
         style={[styles.input, { borderColor: primaryColor }]} // Apply border color dynamically
+        theme={{ colors: { primary: primaryColor } }} // Ensure the textInput uses primary color
       />
       <TextInput
         label="Password"
@@ -40,7 +48,9 @@ const LoginScreen = ({ navigation }) => {
         secureTextEntry
         mode="outlined"
         style={[styles.input, { borderColor: primaryColor }]} // Apply border color dynamically
+        theme={{ colors: { primary: primaryColor } }} // Ensure the textInput uses primary color
       />
+      
       <Button
         mode="contained"
         onPress={handleLogin}
@@ -49,12 +59,25 @@ const LoginScreen = ({ navigation }) => {
       >
         Login <IconButton icon="login" color="white" />
       </Button>
+
       <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
         <Text style={[styles.link, { color: primaryColor }]}>Don't have an account? Sign Up</Text>
       </TouchableOpacity>
+
       <TouchableOpacity>
         <Text style={[styles.forgotPassword, { color: primaryColor }]}>Forgot Password?</Text>
       </TouchableOpacity>
+
+      {/* Theme toggle switch */}
+      <View style={styles.switchContainer}>
+        <Text style={[styles.switchText, { color: textColor }]}>Toggle Dark Mode</Text>
+        <Switch
+          value={isDarkMode}
+          onValueChange={toggleTheme}
+          trackColor={{ false: lightColors.switchTrack, true: darkColors.switchTrack }}
+          thumbColor={isDarkMode ? darkColors.switchThumb : lightColors.switchThumb}
+        />
+      </View>
     </View>
   );
 };
@@ -104,6 +127,15 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 14,
     marginTop: 10,
+  },
+  switchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 30,
+  },
+  switchText: {
+    fontSize: 16,
+    marginRight: 10,
   },
 });
 
