@@ -6,7 +6,7 @@ export const lightColors = {
   warning: '#FFC107',
   error: '#fb573b',
   info: '#2196F3',
-  background: '#303ac3',
+  background: '#dfe2f7',
   light: '#ffffff',
   backgroundRGB: '48, 58, 195',
   backgroundRGBSuccess: '76, 175, 80',
@@ -23,9 +23,14 @@ export const lightColors = {
 };
 
 export const darkColors = {
-  background: '#121212',
+  background: '#18181a',
+  inputBackground: '#303030',
   text: '#ffffff',
-  primary: '#bb86fc',
+  primary: '#303ac3',
+  success: '#4CAF50',
+  warning: '#FFC107',
+  error: '#fb573b',
+  info: '#2196F3',
   light: '#bb86fc',
   switchTrack: '#767577',
   switchThumb: '#bb86fc',
