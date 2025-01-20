@@ -19,11 +19,11 @@ export const lightColors = {
   placeholder: '#a0a0a0',
   backdrop: '#eeeeee',
   switchTrack: '#f4f3f4',
-  switchThumb: '#6200ee',
+  switchThumb: '#303ac3',
 };
 
 export const darkColors = {
-  background: '#18181a',
+  background: '#121212',
   inputBackground: '#303030',
   text: '#ffffff',
   primary: '#303ac3',
@@ -33,5 +33,5 @@ export const darkColors = {
   info: '#2196F3',
   light: '#bb86fc',
   switchTrack: '#767577',
-  switchThumb: '#bb86fc',
+  switchThumb: '#303ac3',
 };

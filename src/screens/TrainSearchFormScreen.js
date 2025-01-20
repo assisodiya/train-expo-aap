@@ -11,7 +11,6 @@ const TrainSearchFormScreen = ({ navigation }) => {
   const [toStation, setToStation] = useState({ code: 'PNVL', name: 'Panvel', city: 'Mumbai, Maharashtra' });
   const [selectedDate, setSelectedDate] = useState(moment().format('YYYY-MM-DD'));
   const [selectedTab, setSelectedTab] = useState('home');
-  const [showCalendar, setShowCalendar] = useState(false);
 
   const tabs = [
     { id: 'home', icon: 'home', label: 'Home', badge: '' },
